@@ -1,136 +1,174 @@
+import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import Button from "./Button.jsx";
-import { siteImages } from "../data/siteImages.js";
-import { fadeUp } from "../utils/animations.js";
+import { ArrowUpRight, MoveHorizontal, RotateCcw } from "lucide-react";
+import MerchSVG from "./MerchSVG.jsx";
 
-const floatingItems = [
-  {
-    key: "tshirt",
-    src: siteImages.heroTshirt,
-    alt: "Folded custom-branded t-shirt",
-    className: "hero__item hero__item--tshirt",
-  },
-  {
-    key: "tote",
-    src: siteImages.heroTote,
-    alt: "Custom branded tote bag",
-    className: "hero__item hero__item--tote",
-  },
-  {
-    key: "cap",
-    src: siteImages.heroCap,
-    alt: "Custom embroidered cap",
-    className: "hero__item hero__item--cap",
-  },
-  {
-    key: "bottle",
-    src: siteImages.heroBottle,
-    alt: "Branded reusable bottle",
-    className: "hero__item hero__item--bottle",
-  },
-  {
-    key: "badge",
-    src: siteImages.heroBadge,
-    alt: "Event badge and lanyard",
-    className: "hero__item hero__item--badge",
-  },
+const pulls = [
+  { garment: "#F7F2E6", ink: "#141210", offset: "#FF48B0", name: "black + pink" },
+  { garment: "#0078BF", ink: "#FFFFFF", offset: "#FFE800", name: "white + yellow" },
+  { garment: "#1B1916", ink: "#FF48B0", offset: "#0078BF", name: "pink + blue" },
+  { garment: "#FFE800", ink: "#141210", offset: "#FF4F28", name: "black + red" },
 ];
 
+function Misregistered({ children, className }) {
+  return (
+    <span className={`misreg ${className || ""}`} data-text={children}>
+      {children}
+    </span>
+  );
+}
+
 export default function Hero() {
-  const prefersReducedMotion = useReducedMotion();
+  const reduce = useReducedMotion();
+  const [progress, setProgress] = useState(0);
+  const [pull, setPull] = useState(0);
+  const [count, setCount] = useState(1);
+  const done = progress >= 98;
+  const colour = pulls[pull % pulls.length];
+
+  const onMove = (e) => {
+    if (reduce) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    const mx = (e.clientX - r.left) / r.width - 0.5;
+    const my = (e.clientY - r.top) / r.height - 0.5;
+    e.currentTarget.style.setProperty("--mx", mx.toFixed(3));
+    e.currentTarget.style.setProperty("--my", my.toFixed(3));
+  };
+
+  const nextPull = () => {
+    setPull((p) => p + 1);
+    setCount((c) => c + 1);
+    setProgress(0);
+  };
 
   return (
-    <section id="top" className="hero">
-      <div className="container hero__inner">
-        <div className="hero__content">
+    <section id="top" className="hero" onPointerMove={onMove}>
+      <div className="hero__meta" aria-hidden="true">
+        <span>JOB Nº IL-2026</span>
+        <span>SHEET 01 / 12</span>
+        <span>3-COLOUR SCREEN PRINT</span>
+        <span className="hero__reg">⊕</span>
+      </div>
+
+      <div className="hero__grid">
+        <div className="hero__copy">
           <motion.p
-            className="eyebrow"
-            initial="hidden"
-            animate="show"
-            variants={fadeUp}
+            className="tag"
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
           >
-            Merchandise • Gifting • Events
+            Merchandise ✶ Gifting ✶ Events
           </motion.p>
 
-          <motion.h1
-            className="hero__headline"
-            initial="hidden"
-            animate="show"
-            variants={fadeUp}
-            transition={{ delay: 0.08 }}
-          >
-            Your Brand.
-            <br />
-            Made Tangible.
-          </motion.h1>
+          <h1 className="hero__title">
+            <Misregistered>Your</Misregistered>{" "}
+            <Misregistered>brand.</Misregistered>
+            <span className="hero__serif">
+              made <em className="marker">tangible.</em>
+            </span>
+          </h1>
 
-          <motion.p
-            className="hero__supporting"
-            initial="hidden"
-            animate="show"
-            variants={fadeUp}
-            transition={{ delay: 0.16 }}
-          >
+          <p className="hero__lede">
             From custom apparel and corporate gifting to event kits and complete
-            merchandise fulfilment, InkLook helps brands turn their identity
-            into something people can wear, use, share and remember.
-          </motion.p>
+            merchandise fulfilment, InkLook turns your identity into something
+            people can wear, use, share and <strong>keep</strong>.
+          </p>
 
-          <motion.div
-            className="hero__actions"
-            initial="hidden"
-            animate="show"
-            variants={fadeUp}
-            transition={{ delay: 0.24 }}
-          >
-            <Button href="#contact">Start a Project</Button>
-            <Button href="#work" variant="secondary" showArrow={false}>
-              View Our Work
-            </Button>
-          </motion.div>
-
-          <motion.p
-            className="hero__note"
-            initial="hidden"
-            animate="show"
-            variants={fadeUp}
-            transition={{ delay: 0.3 }}
-          >
-            Built for brands, communities &amp; events.
-          </motion.p>
+          <div className="hero__actions">
+            <a href="#contact" className="btn btn--ink">
+              Start a project <ArrowUpRight size={18} aria-hidden="true" />
+            </a>
+            <a href="#configurator" className="btn btn--paper">
+              Build your merch
+            </a>
+          </div>
         </div>
 
-        <div className="hero__visual" aria-hidden={false}>
-          {floatingItems.map((item, i) => (
-            <motion.figure
-              key={item.key}
-              className={item.className}
-              initial={{ opacity: 0, y: 30, rotate: 0 }}
-              animate={
-                prefersReducedMotion
-                  ? { opacity: 1, y: 0 }
-                  : { opacity: 1, y: [0, -14, 0] }
-              }
-              transition={
-                prefersReducedMotion
-                  ? { duration: 0.6, delay: 0.1 * i }
-                  : {
-                      opacity: { duration: 0.6, delay: 0.1 * i },
-                      y: {
-                        duration: 4 + i * 0.6,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: 0.1 * i,
-                      },
-                    }
-              }
-              whileHover={
-                prefersReducedMotion ? undefined : { scale: 1.05, rotate: 1 }
-              }
+        <div className="press">
+          <div className="press__label">
+            <span>Try the press</span>
+            <span>
+              Pull Nº {String(count).padStart(4, "0")} · {colour.name}
+            </span>
+          </div>
+
+          <div className={`press__frame ${done ? "is-done" : ""}`}>
+            <div className="press__mesh" aria-hidden="true" />
+            <div className="press__tee">
+              <MerchSVG
+                product="tee"
+                garment={colour.garment}
+                printed={false}
+                className="press__blank"
+                title="Blank T-shirt on the press"
+              />
+              <div
+                className="press__ink"
+                style={{ clipPath: `inset(0 ${100 - progress}% 0 0)` }}
+              >
+                <MerchSVG
+                  product="tee"
+                  garment={colour.garment}
+                  ink={colour.ink}
+                  offsetInk={colour.offset}
+                  text="INKLOOK"
+                  title="T-shirt printed with the InkLook mark"
+                />
+              </div>
+            </div>
+
+            <div
+              className="squeegee"
+              style={{ left: `${progress}%` }}
+              aria-hidden="true"
             >
-              <img src={item.src} alt={item.alt} loading="eager" />
-            </motion.figure>
-          ))}
+              <span className="squeegee__blade" />
+              <span className="squeegee__grip">
+                <MoveHorizontal size={18} />
+              </span>
+            </div>
+
+            <label className="sr-only" htmlFor="squeegee">
+              Drag the squeegee to print the T-shirt
+            </label>
+            <input
+              id="squeegee"
+              className="press__range"
+              type="range"
+              min="0"
+              max="100"
+              value={progress}
+              onChange={(e) => setProgress(Number(e.target.value))}
+            />
+
+            {done && (
+              <motion.div
+                className="stamp stamp--hero"
+                initial={reduce ? false : { scale: 2.4, opacity: 0, rotate: -24 }}
+                animate={{ scale: 1, opacity: 1, rotate: -12 }}
+                transition={{ type: "spring", stiffness: 500, damping: 22 }}
+                role="status"
+              >
+                Printed!
+              </motion.div>
+            )}
+          </div>
+
+          <div className="press__foot">
+            {done ? (
+              <button type="button" className="btn btn--yellow btn--sm" onClick={nextPull}>
+                <RotateCcw size={16} aria-hidden="true" /> Pull another colourway
+              </button>
+            ) : (
+              <p className="press__hint">
+                <span className="press__arrow" aria-hidden="true">
+                  →
+                </span>{" "}
+                Drag the squeegee across the screen
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </section>

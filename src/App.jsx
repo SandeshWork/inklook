@@ -1,36 +1,37 @@
-import Navbar from "./components/Navbar.jsx";
+import Nav from "./components/Nav.jsx";
 import Hero from "./components/Hero.jsx";
-import TrustStrip from "./components/TrustStrip.jsx";
-import IntroSection from "./components/IntroSection.jsx";
-import Services from "./components/Services.jsx";
-import MerchandiseShowcase from "./components/MerchandiseShowcase.jsx";
-import Process from "./components/Process.jsx";
-import EventSection from "./components/EventSection.jsx";
-import CaseStudies from "./components/CaseStudies.jsx";
-import WhyInklook from "./components/WhyInklook.jsx";
-import Testimonials from "./components/Testimonials.jsx";
-import QuoteForm from "./components/QuoteForm.jsx";
-import FinalCTA from "./components/FinalCTA.jsx";
+import Tapes from "./components/Tapes.jsx";
+import Manifesto from "./components/Manifesto.jsx";
+import Swatches from "./components/Swatches.jsx";
+import Configurator from "./components/Configurator.jsx";
+import Shelf from "./components/Shelf.jsx";
+import JobTicket from "./components/JobTicket.jsx";
+import Receipt from "./components/Receipt.jsx";
+import Posters from "./components/Posters.jsx";
+import Reasons from "./components/Reasons.jsx";
+import WorkOrder from "./components/WorkOrder.jsx";
 import Footer from "./components/Footer.jsx";
-import "./styles/site.css";
+import "./styles/print.css";
 
 export default function App() {
   return (
     <>
-      <Navbar />
-      <main>
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+      <Nav />
+      <main id="main">
         <Hero />
-        <TrustStrip />
-        <IntroSection />
-        <Services />
-        <MerchandiseShowcase />
-        <Process />
-        <EventSection />
-        <CaseStudies />
-        <WhyInklook />
-        <Testimonials />
-        <QuoteForm />
-        <FinalCTA />
+        <Tapes />
+        <Manifesto />
+        <Swatches />
+        <Configurator />
+        <Shelf />
+        <JobTicket />
+        <Receipt />
+        <Posters />
+        <Reasons />
+        <WorkOrder />
       </main>
       <Footer />
     </>

@@ -1,110 +1,47 @@
-import { Mail, MessageCircle } from "lucide-react";
-
-// Instagram / LinkedIn glyphs, drawn to match lucide's stroke style —
-// lucide-react no longer ships brand/logo icons.
-function InstagramIcon({ size = 16, strokeWidth = 1.8, ...rest }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={strokeWidth}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...rest}
-    >
-      <rect x="3" y="3" width="18" height="18" rx="5" />
-      <circle cx="12" cy="12" r="4" />
-      <circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-
-function LinkedinIcon({ size = 16, strokeWidth = 1.8, ...rest }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={strokeWidth}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...rest}
-    >
-      <rect x="3" y="3" width="18" height="18" rx="3" />
-      <circle cx="7.5" cy="6.8" r="0.6" fill="currentColor" stroke="none" />
-      <line x1="7.5" y1="10" x2="7.5" y2="17" />
-      <path d="M11.5 17v-4.2c0-1.5 1-2.3 2.2-2.3 1.2 0 2.1.8 2.1 2.3V17" />
-      <line x1="11.5" y1="10" x2="11.5" y2="17" />
-    </svg>
-  );
-}
-
-const exploreLinks = [
-  { label: "Services", href: "#services" },
-  { label: "Products", href: "#products" },
-  { label: "Our Work", href: "#work" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
-];
-
-// Placeholder social links — replace with InkLook's real accounts.
-const socialLinks = [
-  { label: "Instagram", href: "#", icon: InstagramIcon },
-  { label: "LinkedIn", href: "#", icon: LinkedinIcon },
-  { label: "Email", href: "mailto:hello@inklook.example", icon: Mail },
-  { label: "WhatsApp", href: "#", icon: MessageCircle },
-];
+import { ArrowUpRight } from "lucide-react";
+import { navLinks } from "../data/siteData.js";
 
 export default function Footer() {
   return (
     <footer className="footer">
-      <div className="container footer__inner">
-        <div className="footer__brand">
-          <p className="footer__logo">INKLOOK</p>
-          <p className="footer__tagline">Merchandise. Gifting. Events.</p>
-          <p className="footer__description">
-            Custom merchandise and branded experience solutions for brands,
-            communities and teams.
+      <svg aria-hidden="true" className="footer__drips" viewBox="0 0 1000 80" preserveAspectRatio="none">
+        <path d="M0 0 H1000 V8 C980 8 978 46 968 46 C958 46 960 8 930 8 H790 C770 8 772 70 760 70 C748 70 752 8 730 8 H540 C525 8 526 32 518 32 C510 32 512 8 495 8 H300 C282 8 284 58 272 58 C260 58 262 8 240 8 H120 C104 8 106 36 98 36 C90 36 92 8 76 8 H0 Z" />
+      </svg>
+      <div className="wrap">
+        <div className="cta">
+          <p className="tag tag--light">Last sheet</p>
+          <h2 className="cta__title">
+            Got an idea? <em>Let&rsquo;s turn it into something people remember.</em>
+          </h2>
+          <p className="cta__sub">
+            Whether you&rsquo;re planning an event, launching a brand, welcoming a
+            new team or building a community — let&rsquo;s make something memorable.
           </p>
+          <a href="#contact" className="btn btn--yellow">
+            Start a project <ArrowUpRight size={18} aria-hidden="true" />
+          </a>
         </div>
 
-        <div className="footer__col">
-          <h3>Explore</h3>
-          <ul>
-            {exploreLinks.map((link) => (
-              <li key={link.label}>
-                <a href={link.href}>{link.label}</a>
-              </li>
+        <div className="footer__cols">
+          <nav aria-label="Footer">
+            {navLinks.map((l) => (
+              <a key={l.href} href={l.href}>
+                {l.label}
+              </a>
             ))}
-          </ul>
-        </div>
-
-        <div className="footer__col">
-          <h3>Connect</h3>
-          <ul className="footer__social">
-            {socialLinks.map((link) => (
-              <li key={link.label}>
-                <a href={link.href} aria-label={link.label}>
-                  <link.icon size={16} strokeWidth={1.8} aria-hidden="true" />
-                  <span>{link.label}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
+          </nav>
+          <div className="mono">
+            <a href="mailto:hello@inklook.example">hello@inklook.example</a>
+            <p>Merchandise. Gifting. Events.</p>
+            <p>© 2026 InkLook. All rights reserved.</p>
+          </div>
         </div>
       </div>
 
-      <div className="container footer__bottom">
-        <p>© 2026 InkLook. All rights reserved.</p>
-        <div className="footer__legal">
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-        </div>
+      <div className="footer__word" aria-hidden="true">
+        <span className="footer__layer footer__layer--pink">INKLOOK</span>
+        <span className="footer__layer footer__layer--blue">INKLOOK</span>
+        <span className="footer__layer">INKLOOK</span>
       </div>
     </footer>
   );

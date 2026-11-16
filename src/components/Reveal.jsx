@@ -1,56 +1,20 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { fadeUp } from "../utils/animations.js";
 
-/**
- * Wraps children in a scroll-triggered reveal animation. Fires once when the
- * element enters the viewport. Falls back to a plain wrapper (no motion) when
- * the user prefers reduced motion.
- */
-export default function Reveal({
-  children,
-  as = "div",
-  variants = fadeUp,
-  delay = 0,
-  className,
-  once = true,
-  amount = 0.2,
-  ...rest
-}) {
-  const prefersReducedMotion = useReducedMotion();
-  const Component = motion[as] || motion.div;
-
-  if (prefersReducedMotion) {
-    const Plain = as;
-    return (
-      <Plain className={className} {...rest}>
-        {children}
-      </Plain>
-    );
-  }
-
-  // Variant-level transitions take priority over the `transition` prop in
-  // Framer Motion, so merge `delay` directly into the variant to stagger
-  // instances of the same variant.
-  const delayedVariants = delay
-    ? {
-        ...variants,
-        show: {
-          ...variants.show,
-          transition: { ...variants.show?.transition, delay },
-        },
-      }
-    : variants;
-
+// Snappy "slap it down" reveal: drops in with a slight rotation, like a
+// sticker being placed. Renders in its final state under reduced motion.
+export default function Reveal({ as = "div", delay = 0, rotate = 0, children, ...rest }) {
+  const reduce = useReducedMotion();
+  const Tag = motion[as] ?? motion.div;
+  if (reduce) return <Tag {...rest}>{children}</Tag>;
   return (
-    <Component
-      className={className}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once, amount }}
-      variants={delayedVariants}
+    <Tag
+      initial={{ opacity: 0, y: 40, rotate: rotate - 3 }}
+      whileInView={{ opacity: 1, y: 0, rotate }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{ type: "spring", stiffness: 420, damping: 30, delay }}
       {...rest}
     >
       {children}
-    </Component>
+    </Tag>
   );
 }
